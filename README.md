@@ -44,8 +44,8 @@
 ### Windows (Git Bash / MinGW)
 ```bash
 # Клонирование репозитория
-git clone https://github.com/kaitukovg/Course.git
-cd XSmall-HMI-Player
+git clone https://github.com/kaitukovg/XSmallHMIScada.git
+cd XSmallHMIScada
 
 # Сборка проекта
 mkdir build
