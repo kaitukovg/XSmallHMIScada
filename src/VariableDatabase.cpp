@@ -37,7 +37,7 @@ double VariableDatabase::getVariable(const std::string& name) const {
     if (it != variables.end()) {
         return it->second;  // Нашли - возвращаем значение
     }
-    return 0.0;  // Не нашли - возвращаем 0 (можно было бы кинуть ошибку)
+    throw std::invalid_atgument("Variable: " + name + " not found in Database");
 }
 
 // Проверка существования переменной
