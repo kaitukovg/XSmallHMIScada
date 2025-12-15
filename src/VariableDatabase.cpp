@@ -37,7 +37,7 @@ double VariableDatabase::getVariable(const std::string& name) const {
     if (it != variables.end()) {
         return it->second;  // Нашли - возвращаем значение
     }
-    throw std::invalid_atgument("Variable: " + name + " not found in Database");
+    throw std::invalid_argument("Variable: " + name + " not found in Database");
 }
 
 // Проверка существования переменной
@@ -89,4 +89,5 @@ void VariableDatabase::initializeDemoVariables() {
     for (int i = 0; i < 10; ++i) {
         setVariable("temperature_history", 70.0 + i * 0.5);
     }
+
 }
