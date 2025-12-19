@@ -23,10 +23,6 @@ public:
     void saveState(const VariableDatabase& db) {
         std::ofstream file(filename);
         if (file.is_open()) {
-            // Получаем текущее время
-            std::time_t now = std::time(nullptr);
-            std::tm* localTime = std::localtime(&now);
-            
             // Начинаем JSON
             file << "{\n";
             
@@ -38,14 +34,6 @@ public:
             file << "  \"setpoint_value\": " << std::fixed << std::setprecision(2) 
                  << db.getVariable("setpoint_value") << ",\n";
             file << "  \"panel_status\": " << static_cast<int>(db.getVariable("panel_status")) << ",\n";
-            
-            // Сохраняем время в читаемом формате
-            char timeStr[100];
-            std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", localTime);
-            file << "  \"saved_at\": \"" << timeStr << "\",\n";
-            
-            // Сохраняем timestamp (секунды с 1970-01-01)
-            file << "  \"timestamp\": " << now << "\n";
             
             // Заканчиваем JSON
             file << "}\n";
@@ -139,5 +127,6 @@ public:
         Logger::info("State loaded from " + filename);
     }
 };
+
 
 #endif
