@@ -118,9 +118,7 @@ void HmiPlayer::run() {
             stateManager.saveState(database);
             saveClock.restart();
         }
-        
-        // Небольшая задержка для контроля FPS
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+
     }
     
     // Сохраняем состояние при закрытии приложения
@@ -455,4 +453,5 @@ bool HmiPlayer::saveSceneToJSON(const std::string& filename) {
         return false;
     }
 }
+
 
