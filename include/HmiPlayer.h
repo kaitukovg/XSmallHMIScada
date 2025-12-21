@@ -8,8 +8,6 @@
 #include "VariableDatabase.h"  
 #include "VisualObject.h"     
 
-// Главный класс приложения 
-
 class HmiPlayer {
 private:
     sf::RenderWindow window;   
@@ -20,18 +18,15 @@ private:
 public:
     HmiPlayer();
 
-    // Инициализация
     bool initialize();
 
     
     void run();
 
-    // Методы главного цикла
     void handleEvents(); 
     void update();        
     void render();  
     
-    // Сохраняет демо-сцену в JSON файл
     bool saveSceneToJSON(const std::string& filename);
 };
 
