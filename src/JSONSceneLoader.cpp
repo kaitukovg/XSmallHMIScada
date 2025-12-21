@@ -44,7 +44,6 @@ namespace {
         return result;
     }
     
-    // Вспомогательная функция для парсинга массива чисел
     std::vector<double> parseDoubleArray(const std::string& str) {
         std::vector<double> result;
         std::string content = trim(str);
@@ -53,16 +52,13 @@ namespace {
             return result;
         }
         
-        // Убираем скобки
         content = content.substr(1, content.length() - 2);
         
-        // Разделяем по запятым
         auto parts = split(content, ',');
         for (const auto& part : parts) {
             try {
                 result.push_back(std::stod(trim(part)));
             } catch (const std::exception& e) {
-                // Пропускаем некорректные значения
             }
         }
         
@@ -103,27 +99,25 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
     }
     
     try {
-        // Открываем и читаем файл
         std::ifstream file(filename);
         if (!file.is_open()) {
             Logger::error("Cannot open JSON file: " + filename);
             return objects;
         }
         
-        // Читаем весь файл
         std::stringstream buffer;
         buffer << file.rdbuf();
         std::string content = buffer.str();
         file.close();
         
-        // Упрощенный парсинг JSON - ищем объекты вручную
+        // Упрощенный парсинг JSON
         size_t pos = 0;
         while ((pos = content.find("\"type\"", pos)) != std::string::npos) {
-            // Находим начало объекта
+            //начало объекта
             size_t objStart = content.rfind('{', pos);
             if (objStart == std::string::npos) break;
             
-            // Находим конец объекта
+            //конец объекта
             size_t braceCount = 1;
             size_t objEnd = objStart + 1;
             while (objEnd < content.length() && braceCount > 0) {
@@ -139,7 +133,7 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
             
             std::string objStr = content.substr(objStart, objEnd - objStart);
             
-            // Извлекаем тип объекта
+            //тип 
             size_t typePos = objStr.find("\"type\"");
             if (typePos == std::string::npos) {
                 pos = objEnd;
@@ -157,10 +151,8 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
             
             std::string type = objStr.substr(quoteStart + 1, quoteEnd - quoteStart - 1);
             
-            // Парсим остальные свойства
             std::unordered_map<std::string, std::string> props;
             
-            // Извлекаем свойства
             size_t propPos = 0;
             while ((propPos = objStr.find('"', propPos)) != std::string::npos) {
                 size_t propNameEnd = objStr.find('"', propPos + 1);
@@ -168,7 +160,6 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
                 
                 std::string propName = objStr.substr(propPos + 1, propNameEnd - propPos - 1);
                 
-                // Ищем значение
                 size_t colonPos2 = objStr.find(':', propNameEnd);
                 if (colonPos2 == std::string::npos) break;
                 
@@ -179,12 +170,10 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
                 
                 size_t valueEnd = valueStart;
                 if (objStr[valueStart] == '"') {
-                    // Строковое значение
                     valueEnd = objStr.find('"', valueStart + 1);
                     if (valueEnd == std::string::npos) break;
                     valueEnd++;
                 } else if (objStr[valueStart] == '[') {
-                    // Массив
                     int bracketCount = 1;
                     valueEnd = valueStart + 1;
                     while (valueEnd < objStr.length() && bracketCount > 0) {
@@ -193,7 +182,6 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
                         valueEnd++;
                     }
                 } else {
-                    // Число или другое значение
                     while (valueEnd < objStr.length() && 
                            objStr[valueEnd] != ',' && 
                            objStr[valueEnd] != '}') {
@@ -207,7 +195,6 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
                 propPos = valueEnd;
             }
             
-            // Создаем объект
             std::unique_ptr<VisualObject> obj;
             
             if (type == "Rectangle") {
@@ -252,7 +239,6 @@ std::vector<std::unique_ptr<VisualObject>> JSONSceneLoader::loadFromFile(
     return objects;
 }
 
-// Функции создания объектов
 std::unique_ptr<VisualObject> JSONSceneLoader::createRectangle(
     const std::unordered_map<std::string, std::string>& props,
     VariableDatabase* db,
@@ -270,9 +256,7 @@ std::unique_ptr<VisualObject> JSONSceneLoader::createRectangle(
         
         auto rect = std::make_unique<Rectangle>(x, y, width, height, color, name, db, variable);
         
-        // Обработка условий для прямоугольника Status Panel
         if (name == "Status Panel") {
-            // Добавляем условия изменения цвета
             rect->addCondition(0, sf::Color(124, 36, 179));
             rect->addCondition(1, sf::Color(199, 24, 88));
             rect->addCondition(2, sf::Color(72, 146, 163));
@@ -421,7 +405,6 @@ std::unique_ptr<VisualObject> JSONSceneLoader::createButton(
         auto button = std::make_unique<Button>(x, y, width, height, text, font, fontSize, 
                                               color, name, db, variable, onClick, textColor);
         
-        // Если это кнопка Change Color, убедимся, что она работает
         if (name == "Change Color") {
             Logger::info("Created Change Color button with action: " + action);
         }
@@ -475,3 +458,4 @@ std::unique_ptr<VisualObject> JSONSceneLoader::createImage(
     }
 
 }
+
