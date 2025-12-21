@@ -14,7 +14,6 @@ protected:
     sf::Font font;
     
     void SetUp() override {
-        // Пробуем несколько путей к шрифту
         std::vector<std::string> fontPaths = {
             "assets/fonts/helveticabold.ttf",
             "../assets/fonts/helveticabold.ttf",
@@ -32,9 +31,7 @@ protected:
         }
         
         if (!loaded) {
-            // Если шрифт не загрузился, не прерываем тесты полностью
             std::cerr << "WARNING: cannot load text font!" << std::endl;
-            // Продолжаем тесты, но некоторые могут упасть
         }
     }
 };
@@ -46,7 +43,6 @@ TEST_F(VisualObjectsTest, RectangleCreation) {
 }
 
 TEST_F(VisualObjectsTest, TextCreation) {
-    // Проверяем, что шрифт загружен
     if (font.getInfo().family.empty()) {
         GTEST_SKIP() << "Font cannot be load, skip the test TextCreation";
     }
@@ -57,7 +53,6 @@ TEST_F(VisualObjectsTest, TextCreation) {
 }
 
 TEST_F(VisualObjectsTest, RectangleWithVariable) {
-    // Тестируем прямоугольник с привязанной переменной
     Rectangle rect(10.0f, 20.0f, 100.0f, 50.0f, 
                    sf::Color::Blue, "VarRect", &db, "test_var");
     rect.addCondition(1.0, sf::Color::Green);
@@ -67,7 +62,6 @@ TEST_F(VisualObjectsTest, RectangleWithVariable) {
 }
 
 TEST_F(VisualObjectsTest, XmlLoaderCreatesObjects) {
-    // Проверяем, что шрифт загружен
     if (font.getInfo().family.empty()) {
         GTEST_SKIP() << "Font cannot be load, skip the test XmlLoaderCreatesObjects";
     }
@@ -91,3 +85,4 @@ TEST_F(VisualObjectsTest, XmlLoaderCreatesObjects) {
     EXPECT_TRUE(hasText);
     EXPECT_TRUE(hasButton);
 }
+
