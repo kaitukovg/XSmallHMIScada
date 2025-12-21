@@ -8,18 +8,18 @@
 #include <filesystem>
 #include <fstream>
 
-// Конструктор - создает окно
+
 HmiPlayer::HmiPlayer() 
     : window(sf::VideoMode(1024, 768), "XSmall-HMI SCADA Player") {
     
-    window.setFramerateLimit(60);  // Ограничиваем FPS для экономии ресурсов
+    window.setFramerateLimit(60);  
 }
 
-// Инициализация приложения
+
 bool HmiPlayer::initialize() {
-    // Пробуем загрузить шрифт из нескольких возможных мест
+
     std::vector<std::string> fontPaths = {
-        "../assets/fonts/helveticabold.ttf",  // На уровень выше
+        "../assets/fonts/helveticabold.ttf",  На уровень выше
         "assets/fonts/helveticabold.ttf",     // В папке assets
         "assets/fonts/arial.ttf",             // Запасной шрифт
         "../../assets/fonts/helveticabold.ttf" // На два уровня выше
