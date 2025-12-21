@@ -12,15 +12,14 @@
 #include <vector>
 #include <memory>
 
-// Создаем демо-сцену (тестовый интерфейс)
 std::vector<std::unique_ptr<VisualObject>> SceneFactory::createDemoScene(
     VariableDatabase* db,
     sf::Font* font) {
     
-    // Вектор для хранения объектов сцены
     std::vector<std::unique_ptr<VisualObject>> objects;
     
     Logger::info("CREATING SCADA DEMO-SCENE");
     
     return objects;
+
 }
