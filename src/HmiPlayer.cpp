@@ -72,7 +72,6 @@ bool HmiPlayer::initialize() {
     if (!std::filesystem::exists(jsonPath)) {
         Logger::info("FILW objects.json NOT FOUND. CREATING A NEW SCADA DEMO-SCENE...");
         
-        // Создаем файл с демо-сценой
         if (!saveSceneToJSON(jsonPath)) {
             Logger::error("FAILED TO CREATE objects.json FILE");
             return false;
@@ -81,17 +80,14 @@ bool HmiPlayer::initialize() {
         Logger::info("FILE objects.json SUCCESSFULLY CREATED IN: " + jsonPath);
     }
     
-    // Загружаем объекты из JSON файла
     Logger::info("LOADING SCENE FROM JSON: " + jsonPath);
     objects = JSONSceneLoader::loadFromFile(jsonPath, &database, &font);
     
-    // ПРОВЕРКА 2: Если файл существует, но пустой (не загружены объекты)
     if (objects.empty()) {
         Logger::error("FILE objects.json EXISTS, BUT DOES NOT CONTAIN ANY OBJECTS OR EMPTY.");
         Logger::error("EDIT FILE " + jsonPath + " AND ADD NEW OBJECTS.");
         
-        // Очищаем окно и показываем сообщение об ошибке
-        return true; // Продолжаем запуск с пустым окном
+        return true; 
     }
     
     Logger::info("LOADED OBJECTS FROM JSON: " + std::to_string(objects.size()));
@@ -99,17 +95,14 @@ bool HmiPlayer::initialize() {
     return true;
 }
 
-// Главный цикл приложения
 void HmiPlayer::run() {
     StateManager stateManager;
     
-    // Главный цикл - работает пока открыто окно
     while (window.isOpen()) {
-        handleEvents();  // Обрабатываем события (клики, закрытие окна)
-        update();        // Обновляем состояние объектов
-        render();        // Рисуем все объекты
+        handleEvents();  
+        update();      
+        render();        
         
-        // Автосохранение каждые 30 секунд
         static sf::Clock saveClock;
         if (saveClock.getElapsedTime().asSeconds() > 30.0) {
             stateManager.saveState(database);
@@ -118,32 +111,26 @@ void HmiPlayer::run() {
 
     }
     
-    // Сохраняем состояние при закрытии приложения
     stateManager.saveState(database);
 }
 
-// Обработка событий (закрытие окна, клики мыши и т.д.)
 void HmiPlayer::handleEvents() {
     sf::Event event;
     
-    // Обрабатываем все события в очереди
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
-            window.close();  // Закрываем окно
+            window.close();  
         }
         
-        // Передаем события всем объектам для обработки
         for (auto& obj : objects) {
             obj->handleEvent(event, window);
         }
     }
 }
 
-// Обновление состояния объектов
 void HmiPlayer::update() {
     static sf::Clock updateClock;
 
-    // Обновляем объекты каждые 100 мс (10 раз в секунду)
     if (updateClock.getElapsedTime().asMilliseconds() > 100) {
         for (auto& obj : objects) {
             obj->update();
@@ -151,47 +138,38 @@ void HmiPlayer::update() {
         updateClock.restart();
     }
     
-    // Демо-логика: плавное изменение температуры к заданной уставке
     static sf::Clock demoClock;
     if (demoClock.getElapsedTime().asSeconds() > 0.2) {
         double currentTemp = database.getVariable("temperature_value");
         double setpoint = database.getVariable("setpoint_value");
         
-        // Вычисляем разницу между текущей температурой и уставкой
         double difference = setpoint - currentTemp;
         double change = 0.0;
         
-        // Адаптивный шаг изменения: чем больше разница, тем быстрее меняем
         if (std::abs(difference) > 1.0) {
-            change = (difference > 0) ? 0.2 : -0.2;  // Большая разница - шаг 0.2
+            change = (difference > 0) ? 0.2 : -0.2;  
         } else if (std::abs(difference) > 0.2) {
-            change = difference * 0.5;  // Средняя разница - шаг 0.5 от разницы
+            change = difference * 0.5; 
         } else {
-            change = difference * 0.8;  // Малая разница - почти полностью компенсируем
+            change = difference * 0.8;  
         }
         
-        // Применяем изменение
         double newTemp = currentTemp + change;
         database.setVariable("temperature_value", newTemp);
         
-        // Добавляем в историю для графика
         database.addToHistory("temperature_history", newTemp);
         
         demoClock.restart();
     }
 }
 
-// Отрисовка всех объектов
 void HmiPlayer::render() {
-    // Очищаем окно темно-синим цветом
     window.clear(sf::Color(16, 41, 79));
     
-    // Рисуем все объекты в порядке их добавления
     for (auto& obj : objects) {
         obj->draw(window);
     }
     
-    // Показываем нарисованное
     window.display();
 }
 
@@ -203,7 +181,6 @@ bool HmiPlayer::saveSceneToJSON(const std::string& filename) {
             return false;
         }
         
-        // Записываем полный JSON с демо-сценой
         file << R"({
     "objects": [
         {
@@ -450,5 +427,6 @@ bool HmiPlayer::saveSceneToJSON(const std::string& filename) {
         return false;
     }
 }
+
 
 
