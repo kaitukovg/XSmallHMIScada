@@ -65,6 +65,7 @@ bool HmiPlayer::initialize() {
         projectRoot = ".";
     }
     
+
     std::string jsonPath = projectRoot + "/objects.json";
     
 
@@ -426,7 +427,6 @@ bool HmiPlayer::saveSceneToJSON(const std::string& filename) {
         return false;
     }
 }
-
 
 
 
