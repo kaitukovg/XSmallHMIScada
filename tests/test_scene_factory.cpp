@@ -12,7 +12,6 @@ protected:
     sf::Font font;
     
     void SetUp() override {
-        // Пробуем несколько путей к шрифту
         std::vector<std::string> fontPaths = {            
             "../assets/fonts/helveticabold.ttf",
             "assets/fonts/helveticabold.ttf",
@@ -36,22 +35,18 @@ protected:
 };
 
 TEST_F(SceneFactoryTest, CreateDemoScene) {
-    // Проверяем, что шрифт загружен
     if (font.getInfo().family.empty()) {
         GTEST_SKIP() << "The font is not loaded, we skip the test CreateDemoScene";
     }
     
     auto objects = SceneFactory::createDemoScene(&db, &font);
     
-    // Проверяем, что объекты созданы
     ASSERT_GT(objects.size(), 0) << "At least one object must be created.";
     
-    // Проверяем, что можем получить имена объектов
     for (const auto& obj : objects) {
         EXPECT_FALSE(obj->getName().empty()) << "The object must have a name";
     }
     
-    // Проверяем основные типы объектов
     bool hasRectangle = false;
     bool hasText = false;
     bool hasButton = false;
@@ -68,10 +63,10 @@ TEST_F(SceneFactoryTest, CreateDemoScene) {
     EXPECT_TRUE(hasText) << "There must be at least one text.";
     EXPECT_TRUE(hasButton) << "There must be at least one button.";
     
-    // Проверяем инициализацию переменных в базе данных
     EXPECT_TRUE(db.variableExists("temperature_value")) << "The variable temperature_value must exist";
     EXPECT_TRUE(db.variableExists("pressure_value")) << "There must be a presure_value variable";
     EXPECT_TRUE(db.variableExists("setpoint_value")) << "There must be a setpoint_value variable";
     EXPECT_TRUE(db.variableExists("panel_status")) << "There must be a panel_status variable.";
 }
+
 
