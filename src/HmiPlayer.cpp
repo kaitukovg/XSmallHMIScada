@@ -19,10 +19,10 @@ HmiPlayer::HmiPlayer()
 bool HmiPlayer::initialize() {
 
     std::vector<std::string> fontPaths = {
-        "../assets/fonts/helveticabold.ttf",  На уровень выше
-        "assets/fonts/helveticabold.ttf",     // В папке assets
-        "assets/fonts/arial.ttf",             // Запасной шрифт
-        "../../assets/fonts/helveticabold.ttf" // На два уровня выше
+        "../assets/fonts/helveticabold.ttf",  
+        "assets/fonts/helveticabold.ttf",     
+        "assets/fonts/arial.ttf",            
+        "../../assets/fonts/helveticabold.ttf"
     };
     
     bool fontLoaded = false;
@@ -39,19 +39,16 @@ bool HmiPlayer::initialize() {
         return false;
     }
     
-    // Загружаем сохраненное состояние переменных
     StateManager stateManager;
     stateManager.loadState(database);
     
-    // Определяем путь к корню проекта
     std::string projectRoot;
     
-    // Пробуем несколько путей для поиска корня проекта
     std::vector<std::string> possibleRoots = {
-        ".",                               // Текущая директория
-        "..",                              // На уровень выше
-        "../..",                           // На два уровня выше
-        "C:/projects/XSmall-HMI-Player"    // Абсолютный путь (пример)
+        ".",                               
+        "..",                             
+        "../..",                         
+        "C:/projects/XSmall-HMI-Player"   
     };
     
     for (const auto& root : possibleRoots) {
@@ -68,10 +65,10 @@ bool HmiPlayer::initialize() {
         projectRoot = ".";
     }
     
-    // Путь к файлу конфигурации объектов
+э
     std::string jsonPath = projectRoot + "/objects.json";
     
-    // ПРОВЕРКА 1: Если файла objects.json не существует
+
     if (!std::filesystem::exists(jsonPath)) {
         Logger::info("FILW objects.json NOT FOUND. CREATING A NEW SCADA DEMO-SCENE...");
         
