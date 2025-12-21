@@ -44,8 +44,8 @@ public:
     void handleEvent(const sf::Event& event, sf::RenderWindow& window) override;
     
     bool contains(float pointX, float pointY) const;
-    void setOnClick(std::function<void()> onClickFunc);   а
-    void setTextColor(const sf::Color& color);   
+    void setOnClick(std::function<void()> onClickFunc);
+    void setTextColor(const sf::Color& color); 
 };
 
 
